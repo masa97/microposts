@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
-  before_action :check_user, only: [:edit, :update]
+  before_action :check_user, only: [:show, :edit, :update]
   
   def show
+    @microposts = @user.microposts.order(created_at: :desc)
   end
   
   def new
@@ -43,7 +44,7 @@ class UsersController < ApplicationController
   def check_user
     if @user != current_user
       redirect_to root_path
-      flash[:danger] = "不正を検出しました。別のユーザのアカウント情報は変更できません。"
+      flash[:danger] = "不正を検出しました。別のユーザにはアクセスできません。"
     end
   end
 end
