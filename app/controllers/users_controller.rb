@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :followers, :followings]
   before_action :check_user, only: [:edit, :update]
   
   def show
@@ -30,6 +30,14 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
+  
+  def followers
+    @users = @user.follower_users
+  end
+  
+  def followings
+    @users = @user.following_users
+  end 
   
   private
   
