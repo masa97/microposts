@@ -1,9 +1,14 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :followers, :followings]
   before_action :check_user, only: [:edit, :update]
+  before_action :logged_in_user, only: [:index]
+    
+  def index
+   @users = User.paginate(page: 1)
+  end
   
   def show
-    @microposts = @user.microposts.order(created_at: :desc)
+    @microposts = @user.microposts.order(created_at: :desc).page(params[:page]).per(5) 
   end
   
   def new
@@ -55,4 +60,12 @@ class UsersController < ApplicationController
       flash[:danger] = "不正を検出しました。別のユーザにはアクセスできません。"
     end
   end
+  
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = "Please log in."
+      redirect_to login_url
+    end
+  end
+
 end
